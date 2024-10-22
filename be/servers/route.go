@@ -15,4 +15,6 @@ func SetupItemRoute(router *gin.Engine, ItemController *controllers.ItemControll
 
 	u.POST("/penerimaan-barang", ItemController.CreatePenerimaanBarang)
 	u.POST("/pengeluaran-barang", ItemController.CreatePengeluaranBarang)
+	u.GET("/report", ItemController.GetReportResult)
+	// u.GET("/select/:data", ItemController.GetSelectOption)
 }

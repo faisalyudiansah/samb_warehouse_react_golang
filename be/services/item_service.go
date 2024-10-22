@@ -11,6 +11,7 @@ import (
 type ItemServiceInterface interface {
 	CreatePenerimaanBarangService(ctx context.Context, reqBody dtos.PenerimaanBarang) error
 	CreatePengeluaranBarangService(ctx context.Context, reqBody dtos.PengeluaranBarang) error
+	GetReportResultService(ctx context.Context) ([]dtos.ResponseReportResult, error)
 }
 
 type ItemServiceImplementation struct {
@@ -90,4 +91,29 @@ func (ir *ItemServiceImplementation) CreatePengeluaranBarangService(ctx context.
 		return nil
 	})
 	return err
+}
+
+func (ir *ItemServiceImplementation) GetReportResultService(ctx context.Context) ([]dtos.ResponseReportResult, error) {
+	var res []dtos.ResponseReportResult
+	err := ir.TransactorRepository.Atomic(ctx, func(cForTx context.Context) error {
+		reportData, err := ir.ItemRepository.GetReportData(cForTx)
+		if err != nil {
+			return err
+		}
+		res = make([]dtos.ResponseReportResult, len(reportData))
+		for i := range reportData {
+			res[i] = dtos.ResponseReportResult{
+				Warehouse: reportData[i].Warehouse,
+				Product:   reportData[i].Product,
+				QtyDus:    reportData[i].QtyDus,
+				QtyPcs:    reportData[i].QtyPcs,
+				Type:      reportData[i].Type,
+			}
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }

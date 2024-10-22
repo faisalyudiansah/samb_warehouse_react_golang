@@ -47,3 +47,12 @@ func (uc *ItemController) CreatePengeluaranBarang(ctx *gin.Context) {
 	}
 	ginutils.ResponseOKPlain(ctx)
 }
+
+func (uc *ItemController) GetReportResult(ctx *gin.Context) {
+	res, err := uc.ItemService.GetReportResultService(ctx)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOK(ctx, res)
+}

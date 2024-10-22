@@ -67,3 +67,11 @@ type TransaksiPengeluaranBarangDetail struct {
 	UpdatedAt         time.Time
 	DeleteAt          *time.Time
 }
+
+type ReportResult struct {
+	Warehouse string
+	Product   string
+	QtyDus    int
+	QtyPcs    int
+	Type      string
+}

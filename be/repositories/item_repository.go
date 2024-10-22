@@ -18,6 +18,7 @@ type ItemRepositoryInterface interface {
 	CreatePenerimaanBarangDetail(ctx context.Context, reqBody *dtos.PenerimaanBarang, TrxInIDF int64) error
 	CreatePengeluaranBarangHeader(ctx context.Context, reqBody *dtos.PengeluaranBarang, trxOutNo string) (*int64, error)
 	CreatePengeluaranBarangDetail(ctx context.Context, reqBody *dtos.PengeluaranBarang, TrxOutIDF int64) error
+	GetReportData(ctx context.Context) ([]models.ReportResult, error)
 }
 
 type ItemRepositoryImplementation struct {
@@ -209,4 +210,69 @@ func (c *ItemRepositoryImplementation) CreatePengeluaranBarangDetail(ctx context
 		_, err = c.db.ExecContext(ctx, query, TrxOutIDF, reqBody.TrxOutDProductIdf, reqBody.TrxOutDQtyDus, reqBody.TrxOutDQtyPcs)
 	}
 	return err
+}
+
+func (c *ItemRepositoryImplementation) GetReportData(ctx context.Context) ([]models.ReportResult, error) {
+	query := `
+        SELECT
+			wh.WhsName AS "warehouse",
+			p.ProductName AS "product",
+			COALESCE(SUM(tin_detail.TrxInDQtyDus), 0) AS "qty_dus",
+			COALESCE(SUM(tin_detail.TrxInDQtyPcs), 0) AS "qty_pcs",
+			'Penerimaan' AS "type"
+		FROM
+			TransaksiPenerimaanBarangHeader tin_header
+		JOIN
+			TransaksiPenerimaanBarangDetail tin_detail ON tin_detail.TrxInIDF = tin_header.TrxInPK
+		JOIN
+			MasterWarehouse wh ON tin_header.WhsIdf = wh.WhsPK
+		JOIN
+			MasterProduct p ON tin_detail.TrxInDProductIdf = p.ProductPK
+		GROUP BY
+			wh.WhsName,
+			p.ProductName
+
+		UNION ALL
+
+		SELECT
+			wh.WhsName AS "warehouse",
+			p.ProductName AS "product",
+			COALESCE(SUM(tout_detail.TrxOutDQtyDus), 0) AS "qty_dus",
+			COALESCE(SUM(tout_detail.TrxOutDQtyPcs), 0) AS "qty_pcs",
+			'Pengeluaran' AS "type"
+		FROM
+			TransaksiPengeluaranBarangHeader tout_header
+		JOIN
+			TransaksiPengeluaranBarangDetail tout_detail ON tout_detail.TrxOutIDF = tout_header.TrxOutPK
+		JOIN
+			MasterWarehouse wh ON tout_header.WhsIdf = wh.WhsPK
+		JOIN
+			MasterProduct p ON tout_detail.TrxOutDProductIdf = p.ProductPK
+		GROUP BY
+			wh.WhsName,
+			p.ProductName
+		ORDER BY
+			"warehouse"
+    `
+	rows, err := c.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var reportResults []models.ReportResult
+	for rows.Next() {
+		var result models.ReportResult
+		err := rows.Scan(&result.Warehouse, &result.Product, &result.QtyDus, &result.QtyPcs, &result.Type)
+		if err != nil {
+			return nil, err
+		}
+		reportResults = append(reportResults, result)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return reportResults, nil
 }
