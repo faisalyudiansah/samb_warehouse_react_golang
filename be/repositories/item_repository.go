@@ -19,6 +19,9 @@ type ItemRepositoryInterface interface {
 	CreatePengeluaranBarangHeader(ctx context.Context, reqBody *dtos.PengeluaranBarang, trxOutNo string) (*int64, error)
 	CreatePengeluaranBarangDetail(ctx context.Context, reqBody *dtos.PengeluaranBarang, TrxOutIDF int64) error
 	GetReportData(ctx context.Context) ([]models.ReportResult, error)
+	GetWarehouseRepository(ctx context.Context) ([]models.MasterWarehouse, error)
+	GetProductRepository(ctx context.Context) ([]models.MasterProduct, error)
+	GetSupplierRepository(ctx context.Context) ([]models.MasterSupplier, error)
 }
 
 type ItemRepositoryImplementation struct {
@@ -275,4 +278,100 @@ func (c *ItemRepositoryImplementation) GetReportData(ctx context.Context) ([]mod
 	}
 
 	return reportResults, nil
+}
+
+func (c *ItemRepositoryImplementation) GetWarehouseRepository(ctx context.Context) ([]models.MasterWarehouse, error) {
+	query := `
+        SELECT
+			m.WhsPK,
+			m.WhsName
+		FROM
+			MasterWarehouse m
+		WHERE m.deleted_at IS NULL ORDER BY m.created_at ASC
+    `
+	rows, err := c.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res []models.MasterWarehouse
+	for rows.Next() {
+		var result models.MasterWarehouse
+		err := rows.Scan(&result.WhsPK, &result.WhsName)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, result)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (c *ItemRepositoryImplementation) GetProductRepository(ctx context.Context) ([]models.MasterProduct, error) {
+	query := `
+        SELECT
+			m.ProductPK,
+			m.ProductName
+		FROM
+			MasterProduct m
+		WHERE m.deleted_at IS NULL ORDER BY m.created_at ASC
+    `
+	rows, err := c.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res []models.MasterProduct
+	for rows.Next() {
+		var result models.MasterProduct
+		err := rows.Scan(&result.ProductPK, &result.ProductName)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, result)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (c *ItemRepositoryImplementation) GetSupplierRepository(ctx context.Context) ([]models.MasterSupplier, error) {
+	query := `
+        SELECT
+			m.SupplierPK,
+			m.SupplierName
+		FROM
+			MasterSupplier m
+		WHERE m.deleted_at IS NULL ORDER BY m.created_at ASC
+    `
+	rows, err := c.db.QueryContext(ctx, query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res []models.MasterSupplier
+	for rows.Next() {
+		var result models.MasterSupplier
+		err := rows.Scan(&result.SupplierPK, &result.SupplierName)
+		if err != nil {
+			return nil, err
+		}
+		res = append(res, result)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }

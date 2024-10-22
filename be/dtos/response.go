@@ -16,3 +16,18 @@ type ResponseReportResult struct {
 	QtyPcs    int    `json:"qty_pcs"`
 	Type      string `json:"type"`
 }
+
+type ResponseWarehouse struct {
+	WhsPK   int64  `json:"whs_pK"`
+	WhsName string `json:"whs_name"`
+}
+
+type ResponseProduct struct {
+	ProductPK   int64  `json:"product_pK"`
+	ProductName string `json:"product_name"`
+}
+
+type ResponseSupplier struct {
+	SupplierPK   int64  `json:"supplier_pK"`
+	SupplierName string `json:"supplier_name"`
+}

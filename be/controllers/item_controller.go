@@ -56,3 +56,30 @@ func (uc *ItemController) GetReportResult(ctx *gin.Context) {
 	}
 	ginutils.ResponseOK(ctx, res)
 }
+
+func (uc *ItemController) GetWarehouse(ctx *gin.Context) {
+	res, err := uc.ItemService.GetWarehouseService(ctx)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOK(ctx, res)
+}
+
+func (uc *ItemController) GetProduct(ctx *gin.Context) {
+	res, err := uc.ItemService.GetProductService(ctx)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOK(ctx, res)
+}
+
+func (uc *ItemController) GetSupplier(ctx *gin.Context) {
+	res, err := uc.ItemService.GetSupplierService(ctx)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOK(ctx, res)
+}
