@@ -33,3 +33,17 @@ func (uc *ItemController) CreatePenerimaanBarang(ctx *gin.Context) {
 	}
 	ginutils.ResponseOKPlain(ctx)
 }
+
+func (uc *ItemController) CreatePengeluaranBarang(ctx *gin.Context) {
+	req := new(dtos.PengeluaranBarang)
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ctx.Error(err)
+		return
+	}
+	err := uc.ItemService.CreatePengeluaranBarangService(ctx, *req)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOKPlain(ctx)
+}

@@ -10,6 +10,7 @@ import (
 
 type ItemServiceInterface interface {
 	CreatePenerimaanBarangService(ctx context.Context, reqBody dtos.PenerimaanBarang) error
+	CreatePengeluaranBarangService(ctx context.Context, reqBody dtos.PengeluaranBarang) error
 }
 
 type ItemServiceImplementation struct {
@@ -41,7 +42,7 @@ func (ir *ItemServiceImplementation) CreatePenerimaanBarangService(ctx context.C
 		if err != nil || productDB.ProductPK == 0 {
 			return apperrors.ProductIDInvalid
 		}
-		lastTrxInPK, err := ir.ItemRepository.FindLastTrxInPK(cForTx)
+		lastTrxInPK, err := ir.ItemRepository.FindLastTrxInPKPenerimaan(cForTx)
 		if err != nil {
 			return err
 		}
@@ -51,6 +52,38 @@ func (ir *ItemServiceImplementation) CreatePenerimaanBarangService(ctx context.C
 			return err
 		}
 		err = ir.ItemRepository.CreatePenerimaanBarangDetail(cForTx, &reqBody, *res)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}
+
+func (ir *ItemServiceImplementation) CreatePengeluaranBarangService(ctx context.Context, reqBody dtos.PengeluaranBarang) error {
+	err := ir.TransactorRepository.Atomic(ctx, func(cForTx context.Context) error {
+		warehouseDB, err := ir.ItemRepository.FindWarehouseById(cForTx, reqBody.WhsIdf)
+		if err != nil || warehouseDB.WhsPK == 0 {
+			return apperrors.WarehouseIDInvalid
+		}
+		supplierDB, err := ir.ItemRepository.FindSupplierById(cForTx, reqBody.TrxOutSuppIdf)
+		if err != nil || supplierDB.SupplierPK == 0 {
+			return apperrors.SupplierIDInvalid
+		}
+		productDB, err := ir.ItemRepository.FindProductById(cForTx, reqBody.TrxOutDProductIdf)
+		if err != nil || productDB.ProductPK == 0 {
+			return apperrors.ProductIDInvalid
+		}
+		lastTrxOutPK, err := ir.ItemRepository.FindLastTrxOutPKPengeluaran(cForTx)
+		if err != nil {
+			return err
+		}
+		newTrxOutNo := helpers.GenerateTrxInNo(lastTrxOutPK, "OUT")
+		res, err := ir.ItemRepository.CreatePengeluaranBarangHeader(cForTx, &reqBody, newTrxOutNo)
+		if err != nil {
+			return err
+		}
+		err = ir.ItemRepository.CreatePengeluaranBarangDetail(cForTx, &reqBody, *res)
 		if err != nil {
 			return err
 		}
