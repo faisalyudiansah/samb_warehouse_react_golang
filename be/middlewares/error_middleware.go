@@ -10,6 +10,7 @@ import (
 	"server/constants"
 	"server/dtos"
 	"server/helpers"
+	"server/helpers/validationutils"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -25,11 +26,7 @@ func ErrorHandler(c *gin.Context) {
 		err := c.Errors.Last()
 		switch e := err.Err.(type) {
 		case validator.ValidationErrors:
-			var ve validator.ValidationErrors
-			if errors.As(c.Errors[0].Err, &ve) {
-				c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"errors": helpers.FormatterErrorInput(ve)})
-				return
-			}
+			handleValidationError(c, e)
 		case *json.SyntaxError:
 			handleJsonSyntaxError(c)
 		case *json.UnmarshalTypeError:
@@ -49,6 +46,11 @@ func ErrorHandler(c *gin.Context) {
 				apperrors.ErrUnauthorization:    http.StatusUnauthorized,
 				apperrors.ErrUrlNotFound:        http.StatusNotFound,
 				apperrors.ErrRequestBodyInvalid: http.StatusBadRequest,
+				apperrors.ErrLimitError:         http.StatusBadRequest,
+				apperrors.ErrTimeoutError:       http.StatusBadRequest,
+				apperrors.WarehouseIDInvalid:    http.StatusBadRequest,
+				apperrors.SupplierIDInvalid:     http.StatusBadRequest,
+				apperrors.ProductIDInvalid:      http.StatusBadRequest,
 			}
 			if statusCode, exists := errorMappings[c.Errors[0].Err]; exists {
 				helpers.PrintError(c, statusCode, c.Errors[0].Err.Error())
@@ -57,6 +59,22 @@ func ErrorHandler(c *gin.Context) {
 			helpers.PrintError(c, http.StatusInternalServerError, apperrors.ErrISE.Error())
 		}
 	}
+}
+
+func handleValidationError(ctx *gin.Context, err validator.ValidationErrors) {
+	ve := []dtos.FieldError{}
+
+	for _, fe := range err {
+		ve = append(ve, dtos.FieldError{
+			Field:   fe.Field(),
+			Message: validationutils.TagToMsg(fe),
+		})
+	}
+
+	ctx.AbortWithStatusJSON(http.StatusBadRequest, dtos.WebResponse[any]{
+		Message: constants.ValidationErrorMessage,
+		Errors:  ve,
+	})
 }
 
 func handleJsonSyntaxError(ctx *gin.Context) {

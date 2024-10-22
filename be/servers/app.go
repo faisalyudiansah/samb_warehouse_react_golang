@@ -29,6 +29,7 @@ func RunServer() {
 	router.ContextWithFallback = true
 	router.HandleMethodNotAllowed = true
 
+	RegisterValidators()
 	SetupServer(router, db)
 
 	AddrConfig := os.Getenv("ADDR_CONFIG")

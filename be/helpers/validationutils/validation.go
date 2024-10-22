@@ -1,7 +1,9 @@
 package validationutils
 
 import (
+	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 
@@ -184,4 +186,30 @@ func RoleValidator(fl validator.FieldLevel) bool {
 		return false
 	}
 	return false
+}
+
+func ValidateDate(fl validator.FieldLevel) bool {
+	dateStr := fl.Field().String()
+	_, err := time.Parse("2006-01-02", dateStr)
+	return err == nil
+}
+
+func NumericValidator(fl validator.FieldLevel) bool {
+	field := fl.Field()
+
+	if field.Kind() == reflect.String {
+		str := field.String()
+		if _, err := strconv.ParseInt(str, 10, 64); err == nil {
+			return true
+		}
+		return false
+	}
+
+	switch field.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
+		reflect.Float32, reflect.Float64:
+		return true
+	default:
+		return false
+	}
 }

@@ -3,43 +3,31 @@ package models
 import "time"
 
 type MasterSupplier struct {
-	SupplierPK   int
+	SupplierPK   int64
 	SupplierName string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	DeleteAt     *time.Time
 }
 
 type MasterCustomer struct {
-	CustomerPK   int
+	CustomerPK   int64
 	CustomerName string
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
-	DeleteAt     *time.Time
 }
 
 type MasterProduct struct {
-	ProductPK   int
+	ProductPK   int64
 	ProductName string
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	DeleteAt    *time.Time
 }
 
 type MasterWarehouse struct {
-	WhsPK     int
-	WhsName   string
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeleteAt  *time.Time
+	WhsPK   int64
+	WhsName string
 }
 
 type TransaksiPenerimaanBarangHeader struct {
-	TrxInPK      int
+	TrxInPK      int64
 	TrxInNo      string
-	WhsIdf       int
+	WhsIdf       int64
 	TrxInDate    time.Time
-	TrxInSuppIdf int
+	TrxInSuppIdf int64
 	TrxInNotes   string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
@@ -47,9 +35,9 @@ type TransaksiPenerimaanBarangHeader struct {
 }
 
 type TransaksiPenerimaanBarangDetail struct {
-	TrxInDPK         int
-	TrxInIDF         int
-	TrxInDProductIdf int
+	TrxInDPK         int64
+	TrxInIDF         int64
+	TrxInDProductIdf int64
 	TrxInDQtyDus     int
 	TrxInDQtyPcs     int
 	CreatedAt        time.Time
@@ -58,11 +46,11 @@ type TransaksiPenerimaanBarangDetail struct {
 }
 
 type TransaksiPengeluaranBarangHeader struct {
-	TrxOutPK      int
+	TrxOutPK      int64
 	TrxOutNo      string
-	WhsIdf        int
+	WhsIdf        int64
 	TrxOutDate    time.Time
-	TrxOutSuppIdf int
+	TrxOutSuppIdf int64
 	TrxOutNotes   string
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
@@ -70,9 +58,9 @@ type TransaksiPengeluaranBarangHeader struct {
 }
 
 type TransaksiPengeluaranBarangDetail struct {
-	TrxOutDPK         int
-	TrxOutIDF         int
-	TrxOutDProductIdf int
+	TrxOutDPK         int64
+	TrxOutIDF         int64
+	TrxOutDProductIdf int64
 	TrxOutDQtyDus     int
 	TrxOutDQtyPcs     int
 	CreatedAt         time.Time

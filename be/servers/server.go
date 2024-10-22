@@ -30,6 +30,5 @@ func SetupMiddlewares(router *gin.Engine) {
 		}),
 		gin.Recovery(),
 	}
-	RegisterValidators()
 	router.Use(middlewares...)
 }

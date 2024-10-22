@@ -29,6 +29,8 @@ func TagToMsg(fe validator.FieldError) string {
 		return fmt.Sprintf("%s must be greater than or equal to %v", fe.Field(), fe.Param())
 	case "lte":
 		return fmt.Sprintf("%s must be lower than or equal to %v", fe.Field(), fe.Param())
+	case "gt":
+		return fmt.Sprintf("%s must be greater than %v", fe.Field(), fe.Param())
 	case "email":
 		return fmt.Sprintf("%s has invalid email format", fe.Field())
 	case "eq":
@@ -53,6 +55,8 @@ func TagToMsg(fe validator.FieldError) string {
 		return fmt.Sprintf("%s must be lower than or equal to %v", fe.Field(), fe.Param())
 	case "phone_number":
 		return fmt.Sprintf("%s has an invalid phone number format", fe.Field())
+	case "date":
+		return fmt.Sprintf("%s has an invalid date format", fe.Field())
 	case "time_format":
 		return fmt.Sprintf("please send time in format of %s", constants.ConvertGoTimeLayoutToReadable(fe.Param()))
 	case "no_duplicates":

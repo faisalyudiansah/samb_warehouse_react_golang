@@ -13,3 +13,9 @@ var (
 	ErrLimitError         = errors.New(constants.TooManyRequestsErrorMessage)
 	ErrTimeoutError       = errors.New(constants.RequestTimeoutErrorMessage)
 )
+
+var (
+	WarehouseIDInvalid = errors.New(constants.WarehouseIDInvalid)
+	SupplierIDInvalid  = errors.New(constants.SupplierIDInvalid)
+	ProductIDInvalid   = errors.New(constants.ProductIDInvalid)
+)

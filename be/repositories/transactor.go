@@ -3,12 +3,11 @@ package repositories
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	helpercontext "server/helpers/helper_context"
 )
 
 type TransactorRepositoryInterface interface {
-	Atomic(c context.Context, fn func(context.Context) (any, error)) (any, error)
+	Atomic(ctx context.Context, fn func(context.Context) error) error
 }
 
 type TransactorRepositoryImplementation struct {
@@ -21,27 +20,24 @@ func NewTransactorRepositoryImplementation(db *sql.DB) *TransactorRepositoryImpl
 	}
 }
 
-func (dc *TransactorRepositoryImplementation) Atomic(c context.Context, fn func(context.Context) (any, error)) (any, error) {
-	tx, err := dc.db.Begin()
+func (t *TransactorRepositoryImplementation) Atomic(ctx context.Context, fn func(context.Context) error) error {
+	tx, err := t.db.BeginTx(ctx, nil)
 	if err != nil {
-		return nil, err
+		return err
 	}
+	defer tx.Rollback()
 
-	defer func() {
-		if p := recover(); p != nil {
-			tx.Rollback()
-			panic(p)
-		} else if err != nil {
-			if rbErr := tx.Rollback(); rbErr != nil {
-				err = fmt.Errorf("tx err: %v, rb err: %v", err, rbErr)
-			}
+	err = fn(helpercontext.SetTx(ctx, tx))
+	if err != nil {
+		if errRollback := tx.Rollback(); errRollback != nil {
+			return err
 		}
-		err = tx.Commit()
-	}()
-
-	result, err := fn(helpercontext.SetTx(c, tx))
-	if err != nil {
-		return nil, err
+		return err
 	}
-	return result, nil
+
+	if err := tx.Commit(); err != nil {
+		return err
+	}
+
+	return nil
 }

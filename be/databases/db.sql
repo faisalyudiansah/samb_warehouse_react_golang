@@ -127,11 +127,11 @@ VALUES
 
 INSERT INTO TransaksiPenerimaanBarangHeader (TrxInNo, WhsIdf, TrxInDate, TrxInSuppIdf, TrxInNotes, created_at, updated_at)
 VALUES 
-    ('IN-001', 1, '2024-09-10', 1, 'Penerimaan pertama dari Supplier A', '2024-09-10', '2024-09-10'),
-    ('IN-002', 2, '2024-09-15', 2, 'Penerimaan kedua dari Supplier B', '2024-09-15', '2024-09-15'),
-    ('IN-003', 3, '2024-10-02', 3, 'Penerimaan ketiga dari Supplier C', '2024-10-02', '2024-10-02'),
-    ('IN-004', 4, '2024-10-06', 4, 'Penerimaan keempat dari Supplier D', '2024-10-06', '2024-10-06'),
-    ('IN-005', 5, '2024-10-10', 5, 'Penerimaan kelima dari Supplier E', '2024-10-10', '2024-10-10');
+    ('IN-001-2024', 1, '2024-09-10', 1, 'Penerimaan pertama dari Supplier A', '2024-09-10', '2024-09-10'),
+    ('IN-002-2024', 2, '2024-09-15', 2, 'Penerimaan kedua dari Supplier B', '2024-09-15', '2024-09-15'),
+    ('IN-003-2024', 3, '2024-10-02', 3, 'Penerimaan ketiga dari Supplier C', '2024-10-02', '2024-10-02'),
+    ('IN-004-2024', 4, '2024-10-06', 4, 'Penerimaan keempat dari Supplier D', '2024-10-06', '2024-10-06'),
+    ('IN-005-2024', 5, '2024-10-10', 5, 'Penerimaan kelima dari Supplier E', '2024-10-10', '2024-10-10');
 
 INSERT INTO TransaksiPenerimaanBarangDetail (TrxInIDF, TrxInDProductIdf, TrxInDQtyDus, TrxInDQtyPcs, created_at, updated_at)
 VALUES 
@@ -143,11 +143,11 @@ VALUES
 
 INSERT INTO TransaksiPengeluaranBarangHeader (TrxOutNo, WhsIdf, TrxOutDate, TrxOutSuppIdf, TrxOutNotes, created_at, updated_at)
 VALUES 
-    ('OUT-001', 1, '2024-09-12', 1, 'Pengeluaran pertama ke Customer A', '2024-09-12', '2024-09-12'),
-    ('OUT-002', 2, '2024-09-18', 2, 'Pengeluaran kedua ke Customer B', '2024-09-18', '2024-09-18'),
-    ('OUT-003', 3, '2024-10-03', 3, 'Pengeluaran ketiga ke Customer C', '2024-10-03', '2024-10-03'),
-    ('OUT-004', 4, '2024-10-07', 4, 'Pengeluaran keempat ke Customer D', '2024-10-07', '2024-10-07'),
-    ('OUT-005', 5, '2024-10-11', 5, 'Pengeluaran kelima ke Customer E', '2024-10-11', '2024-10-11');
+    ('OUT-001-2024', 1, '2024-09-12', 1, 'Pengeluaran pertama ke Customer A', '2024-09-12', '2024-09-12'),
+    ('OUT-002-2024', 2, '2024-09-18', 2, 'Pengeluaran kedua ke Customer B', '2024-09-18', '2024-09-18'),
+    ('OUT-003-2024', 3, '2024-10-03', 3, 'Pengeluaran ketiga ke Customer C', '2024-10-03', '2024-10-03'),
+    ('OUT-004-2024', 4, '2024-10-07', 4, 'Pengeluaran keempat ke Customer D', '2024-10-07', '2024-10-07'),
+    ('OUT-005-2024', 5, '2024-10-11', 5, 'Pengeluaran kelima ke Customer E', '2024-10-11', '2024-10-11');
 
 INSERT INTO TransaksiPengeluaranBarangDetail (TrxOutIDF, TrxOutDProductIdf, TrxOutDQtyDus, TrxOutDQtyPcs, created_at, updated_at)
 VALUES 

@@ -20,12 +20,16 @@ func NewItemController(
 	}
 }
 
-func (uc *ItemController) CreatePenerimaanBarang(c *gin.Context) {
+func (uc *ItemController) CreatePenerimaanBarang(ctx *gin.Context) {
 	req := new(dtos.PenerimaanBarang)
-	if err := c.ShouldBindJSON(req); err != nil {
-		c.Error(err)
+	if err := ctx.ShouldBindJSON(req); err != nil {
+		ctx.Error(err)
 		return
 	}
-
-	ginutils.ResponseOKPlain(c)
+	err := uc.ItemService.CreatePenerimaanBarangService(ctx, *req)
+	if err != nil {
+		ctx.Error(err)
+		return
+	}
+	ginutils.ResponseOKPlain(ctx)
 }
