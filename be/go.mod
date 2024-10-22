@@ -3,14 +3,17 @@ module server
 go 1.22.0
 
 require (
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/jackc/pgx/v4 v4.18.3
 	github.com/jackc/pgx/v5 v5.5.3
 	github.com/joho/godotenv v1.5.1
+	github.com/shopspring/decimal v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 	golang.org/x/crypto v0.27.0
+	golang.org/x/time v0.7.0
 )
 
 require (

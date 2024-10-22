@@ -15,7 +15,7 @@ func jsonFieldName(fieldName string) string {
 	return jsonTag
 }
 
-func msgForTag(tag string, nameSpace string) string {
+func MsgForTag(tag string, nameSpace string) string {
 	switch tag {
 	case "required":
 		return "This field is required"
