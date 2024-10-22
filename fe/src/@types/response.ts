@@ -10,8 +10,8 @@ export interface ResponseApiError {
 export interface ResponseReportResult {
     warehouse: string;
     product: string;
-    qtyDus: number;
-    qtyPcs: number;
+    qty_dus: number;
+    qty_pcs: number;
     type: string;
 }
 

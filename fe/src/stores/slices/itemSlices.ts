@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Dispatch } from 'redux';
 import axios from 'axios';
 import { BASE_URL } from '@/constants/api.contant';
-import { ResponseMessageOnly } from '@/@types/response';
+import { ResponseMessageOnly, ResponseReportResult } from '@/@types/response';
 import { PenerimaanBarang, PengeluaranBarang } from '@/@types/request';
 import { handleError } from '../utils/errorHandler';
 
@@ -17,6 +17,9 @@ interface AuthState {
     isPostPengeluaranBarangError: boolean
     isPostPengeluaranBarangLoading: boolean
     isPostPengeluaranBarangMsg: string | null
+    //data Table
+    dataBarang: ResponseReportResult[]
+    dataBarangLoading: boolean
 }
 
 const initialState: AuthState = {
@@ -30,6 +33,9 @@ const initialState: AuthState = {
     isPostPengeluaranBarangError: false,
     isPostPengeluaranBarangLoading: true,
     isPostPengeluaranBarangMsg: null,
+    // data table
+    dataBarang: [],
+    dataBarangLoading: true,
 };
 
 export const itemSlice = createSlice({
@@ -46,6 +52,9 @@ export const itemSlice = createSlice({
         setIsPostPengeluaranBarangError: (state, action) => { state.isPostPengeluaranBarangError = action.payload; },
         setIsPostPengeluaranBarangLoading: (state, action) => { state.isPostPengeluaranBarangLoading = action.payload; },
         setIsPostPengeluaranBarangMsg: (state, action) => { state.isPostPengeluaranBarangMsg = action.payload; },
+        // data table
+        setIsdataBarang: (state, action) => { state.dataBarang = action.payload; },
+        setIsdataBarangLoading: (state, action) => { state.dataBarangLoading = action.payload; },
     },
 });
 
@@ -60,6 +69,9 @@ export const {
     setIsPostPengeluaranBarangError,
     setIsPostPengeluaranBarangLoading,
     setIsPostPengeluaranBarangMsg,
+    // data table
+    setIsdataBarang,
+    setIsdataBarangLoading,
 } = itemSlice.actions;
 
 export const PostPenerimaanBarang = (input: PenerimaanBarang) => async (dispatch: Dispatch): Promise<void> => {
@@ -94,11 +106,13 @@ export const PostPengeluaranBarang = (input: PengeluaranBarang) => async (dispat
 
 export const GetReport = () => async (dispatch: Dispatch): Promise<void> => {
     try {
-        const response = await axios.get<ResponseMessageOnly>(`${BASE_URL}/report`);
-        console.log(response, "<<<")
+        dispatch(setIsdataBarangLoading(true))
+        const response = await axios.get(`${BASE_URL}/report`);
+        dispatch(setIsdataBarang(response.data.data))
     } catch (error) {
         throw error
     } finally {
+        dispatch(setIsdataBarangLoading(false))
     }
 };
 
