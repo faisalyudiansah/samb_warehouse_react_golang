@@ -37,8 +37,8 @@ func RunServer() {
 		Addr:    AddrConfig,
 		Handler: router,
 	}
-	StartWithoutGracefulShutdown(AddrConfig, &srv)
-	// StartWithGracefulShutdown(&srv)
+	// StartWithoutGracefulShutdown(AddrConfig, &srv)
+	StartWithGracefulShutdown(&srv)
 }
 
 func StartWithoutGracefulShutdown(AddrConfig string, srv *http.Server) {
