@@ -24,4 +24,7 @@ func SetupYourRoute(g *gin.Engine, h *HandlerOps) {
 	u.GET("", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Hello, World!"})
 	})
+
+	// u.POST("/penerimaan-barang", controllers.CreatePenerimaanBarang)
+	// u.POST("/pengeluaran-barang", controllers.CreatePengeluaranBarang)
 }
