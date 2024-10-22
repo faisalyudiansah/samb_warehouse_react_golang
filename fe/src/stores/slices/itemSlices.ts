@@ -81,7 +81,7 @@ export const PostPenerimaanBarang = (input: PenerimaanBarang) => async (dispatch
         dispatch(setIsPostPenerimaanBarangSuccess(true))
     } catch (error) {
         dispatch(setIsPostPenerimaanBarangSuccess(false))
-        dispatch(setIsPostPenerimaanBarangError(false))
+        dispatch(setIsPostPenerimaanBarangError(true))
         handleError(error, dispatch, setIsPostPenerimaanBarangMsg);
         throw error
     } finally {
@@ -96,7 +96,7 @@ export const PostPengeluaranBarang = (input: PengeluaranBarang) => async (dispat
         dispatch(setIsPostPengeluaranBarangSuccess(true))
     } catch (error) {
         dispatch(setIsPostPengeluaranBarangSuccess(false))
-        dispatch(setIsPostPengeluaranBarangError(false))
+        dispatch(setIsPostPengeluaranBarangError(true))
         handleError(error, dispatch, setIsPostPengeluaranBarangMsg);
         throw error
     } finally {

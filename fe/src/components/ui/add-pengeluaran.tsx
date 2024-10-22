@@ -32,6 +32,7 @@ export function AddPengeluaran() {
         trx_out_dqty_dus: 0,
         trx_out_dqty_pcs: 0,
     });
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -52,8 +53,18 @@ export function AddPengeluaran() {
             const fetch = async () => {
                 dispatch(GetReport());
             };
+            setErrorMsg("");
             fetch();
             setIsDialogOpen(false);
+            setInput({
+                whs_idf: 0,
+                trx_out_date: "",
+                trx_out_supp_idf: 0,
+                trx_out_notes: "",
+                trx_out_dproduct_idf: 0,
+                trx_out_dqty_dus: 0,
+                trx_out_dqty_pcs: 0,
+            });
             Swal.fire({
                 title: "Success",
                 text: "Pengeluaran Barang berhasil ditambahkan!",
@@ -61,12 +72,7 @@ export function AddPengeluaran() {
                 confirmButtonText: "OK",
             });
         } else if (isPostPengeluaranBarangError) {
-            Swal.fire({
-                title: "Error",
-                text: isPostPengeluaranBarangMsg || "Terjadi kesalahan, silakan coba lagi.",
-                icon: "error",
-                confirmButtonText: "OK",
-            });
+            setErrorMsg(isPostPengeluaranBarangMsg || "Terjadi kesalahan, silakan coba lagi.");
         }
     }, [isPostPengeluaranBarangSuccess, isPostPengeluaranBarangError, isPostPengeluaranBarangMsg]);
 
@@ -81,6 +87,11 @@ export function AddPengeluaran() {
                     <DialogDescription>
                         Tambahkan barang baru pada pengeluaran
                     </DialogDescription>
+                    {errorMsg && (
+                        <div className="bg-gray-200 p-2 flex items-center justify-center rounded-xl">
+                            <p className="text-red-500 text-left">{errorMsg}</p>
+                        </div>
+                    )}
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">

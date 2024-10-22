@@ -32,6 +32,7 @@ export function AddPenerimaan() {
         trx_in_dqty_dus: 0,
         trx_in_dqty_pcs: 0,
     });
+    const [errorMsg, setErrorMsg] = useState<string>("");
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -53,19 +54,25 @@ export function AddPenerimaan() {
             const fetch = async () => {
                 dispatch(GetReport())
             }
-            fetch()
+            setErrorMsg("");
             setIsDialogOpen(false);
+            fetch()
+            setInput({
+                whs_idf: 0,
+                trx_in_date: "",
+                trx_in_supp_idf: 0,
+                trx_in_notes: "",
+                trx_in_dproduct_idf: 0,
+                trx_in_dqty_dus: 0,
+                trx_in_dqty_pcs: 0,
+            });
             Swal.fire({
                 title: "Success",
                 text: "Penerimaan Barang berhasil ditambahkan!",
                 icon: "success",
             });
         } else if (isPostPenerimaanBarangError) {
-            Swal.fire({
-                title: "Error",
-                text: isPostPenerimaanBarangMsg || "Terjadi kesalahan, silakan coba lagi.",
-                icon: "error",
-            });
+            setErrorMsg(isPostPenerimaanBarangMsg || "Terjadi kesalahan, silakan coba lagi.");
         }
     }, [isPostPenerimaanBarangSuccess, isPostPenerimaanBarangError, isPostPenerimaanBarangMsg]);
 
@@ -80,6 +87,11 @@ export function AddPenerimaan() {
                     <DialogDescription>
                         Tambahkan barang baru pada penerimaan
                     </DialogDescription>
+                    {errorMsg && (
+                        <div className="bg-gray-200 p-2 flex items-center justify-center rounded-xl">
+                            <p className="text-red-500 text-left">{errorMsg}</p>
+                        </div>
+                    )}
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                     <div className="grid grid-cols-4 items-center gap-4">
@@ -178,7 +190,14 @@ export function AddPenerimaan() {
                     <Button
                         type="submit"
                         onClick={handleSubmit}
-                        disabled={!input.whs_idf || !input.trx_in_date || !input.trx_in_supp_idf || !input.trx_in_dproduct_idf || !input.trx_in_dqty_dus || !input.trx_in_dqty_pcs}
+                        disabled={
+                            !input.whs_idf ||
+                            !input.trx_in_date ||
+                            !input.trx_in_supp_idf ||
+                            !input.trx_in_dproduct_idf ||
+                            !input.trx_in_dqty_dus ||
+                            !input.trx_in_dqty_pcs
+                        }
                     >
                         Save changes
                     </Button>
