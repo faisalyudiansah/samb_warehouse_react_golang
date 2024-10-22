@@ -22,7 +22,7 @@ export function AddPenerimaan() {
     const { isPostPenerimaanBarangSuccess, isPostPenerimaanBarangError, isPostPenerimaanBarangMsg } = useSelector(
         (state: RootState) => state.itemSlice
     );
-
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [input, setInput] = useState<PenerimaanBarang>({
         whs_idf: 0,
         trx_in_date: "",
@@ -54,6 +54,7 @@ export function AddPenerimaan() {
                 dispatch(GetReport())
             }
             fetch()
+            setIsDialogOpen(false);
             Swal.fire({
                 title: "Success",
                 text: "Penerimaan Barang berhasil ditambahkan!",
@@ -69,7 +70,7 @@ export function AddPenerimaan() {
     }, [isPostPenerimaanBarangSuccess, isPostPenerimaanBarangError, isPostPenerimaanBarangMsg]);
 
     return (
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">Add Penerimaan</Button>
             </DialogTrigger>

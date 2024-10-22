@@ -22,7 +22,7 @@ export function AddPengeluaran() {
     const { isPostPengeluaranBarangSuccess, isPostPengeluaranBarangError, isPostPengeluaranBarangMsg } = useSelector(
         (state: RootState) => state.itemSlice
     );
-
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [input, setInput] = useState<PengeluaranBarang>({
         whs_idf: 0,
         trx_out_date: "",
@@ -53,6 +53,7 @@ export function AddPengeluaran() {
                 dispatch(GetReport());
             };
             fetch();
+            setIsDialogOpen(false);
             Swal.fire({
                 title: "Success",
                 text: "Pengeluaran Barang berhasil ditambahkan!",
@@ -70,7 +71,7 @@ export function AddPengeluaran() {
     }, [isPostPengeluaranBarangSuccess, isPostPengeluaranBarangError, isPostPengeluaranBarangMsg]);
 
     return (
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
                 <Button variant="outline">Add Pengeluaran</Button>
             </DialogTrigger>
