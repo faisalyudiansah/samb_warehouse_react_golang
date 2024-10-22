@@ -2,31 +2,30 @@ package controllers
 
 import (
 	"server/dtos"
-	"server/helpers"
+	"server/helpers/ginutils"
 	"server/services"
 
 	"github.com/gin-gonic/gin"
 )
 
 type ItemController struct {
-	ItemService       services.ItemServiceInterface
-	ValidationReqBody helpers.ValidationReqBodyInterface
+	ItemService services.ItemServiceInterface
 }
 
 func NewItemController(
 	ItemService services.ItemServiceInterface,
-	ValidationReqBody helpers.ValidationReqBodyInterface,
 ) *ItemController {
 	return &ItemController{
-		ItemService:       ItemService,
-		ValidationReqBody: ValidationReqBody,
+		ItemService: ItemService,
 	}
 }
 
-func (uc *ItemController) PostRegisterUserController(c *gin.Context) {
-	var reqBody dtos.PenerimaanBarang
-	if err := uc.ValidationReqBody.ValidationReqBody(c, &reqBody); err != nil {
+func (uc *ItemController) CreatePenerimaanBarang(c *gin.Context) {
+	req := new(dtos.PenerimaanBarang)
+	if err := c.ShouldBindJSON(req); err != nil {
 		c.Error(err)
 		return
 	}
+
+	ginutils.ResponseOKPlain(c)
 }

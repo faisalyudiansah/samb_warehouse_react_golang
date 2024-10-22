@@ -7,7 +7,7 @@ import (
 	helpercontext "server/helpers/helper_context"
 )
 
-type TransactorRepository interface {
+type TransactorRepositoryInterface interface {
 	Atomic(c context.Context, fn func(context.Context) (any, error)) (any, error)
 }
 

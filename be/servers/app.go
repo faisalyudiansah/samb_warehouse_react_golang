@@ -10,6 +10,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -24,13 +25,16 @@ func RunServer() {
 	}
 	defer db.Close()
 
-	SetupController := SetupController(db)
-	r := SetupRoute(SetupController)
+	router := gin.New()
+	router.ContextWithFallback = true
+	router.HandleMethodNotAllowed = true
+
+	SetupServer(router, db)
 
 	AddrConfig := os.Getenv("ADDR_CONFIG")
 	srv := http.Server{
 		Addr:    AddrConfig,
-		Handler: r,
+		Handler: router,
 	}
 	StartWithoutGracefulShutdown(AddrConfig, &srv)
 	// StartWithGracefulShutdown(&srv)

@@ -2,7 +2,7 @@ package repositories
 
 import "database/sql"
 
-type ItemRepository interface {
+type ItemRepositoryInterface interface {
 }
 
 type ItemRepositoryImplementation struct {

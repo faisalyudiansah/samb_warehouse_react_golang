@@ -11,7 +11,7 @@ func FormatterErrorInput(ve validator.ValidationErrors) []dtos.ResponseApiError 
 	result := make([]dtos.ResponseApiError, len(ve))
 	for i, fe := range ve {
 		result[i] = dtos.ResponseApiError{
-			Field: jsonFieldName(fe.Field()),
+			Field: fe.Field(),
 			Msg:   validationutils.TagToMsg(fe),
 		}
 	}
