@@ -1,5 +1,5 @@
 # samb_warehouse_react_golang
-Application to record Incoming Goods at Warehouse A and Outgoing Goods from Warehouse A with React and Golang (PostgreSQL)
+Application to record Incoming Goods at Warehouse A and Outgoing Goods from Warehouse A with Golang (PostgreSQL) and React JS (shadcn ui and aceternity ui)
 
 ## Backend
 - `cd be/`
